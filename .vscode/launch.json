@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-OpenapiAdminApplication<openapi-admin>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.trae.openapi.OpenapiAdminApplication",
+            "projectName": "openapi-admin",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
