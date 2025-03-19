@@ -1,32 +1,35 @@
 <template>
   <div class="api-management">
-    <div class="header">
-      <el-row :gutter="20">
-        <el-col :span="16">
-          <el-form :inline="true" :model="searchForm" class="search-form">
-            <el-form-item label="API名称">
-              <el-input v-model="searchForm.apiName" placeholder="请输入API名称" clearable />
-            </el-form-item>
-            <el-form-item label="接口编号">
-              <el-input v-model="searchForm.apiCode" placeholder="请输入接口编号" clearable />
-            </el-form-item>
-            <el-form-item label="状态">
-              <el-select v-model="searchForm.status" placeholder="请选择状态" clearable>
-                <el-option label="启用" :value="1" />
-                <el-option label="禁用" :value="0" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="handleSearch">查询</el-button>
-              <el-button @click="resetSearch">重置</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="8" style="text-align: right">
-          <el-button type="primary" @click="handleAdd">新增</el-button>
-        </el-col>
-      </el-row>
-    </div>
+    <el-tabs v-model="activeTab" class="api-tabs">
+      <el-tab-pane label="API列表" name="list">
+        <div class="list-container">
+          <div class="header">
+          <el-row :gutter="20">
+            <el-col :span="16">
+              <el-form :inline="true" :model="searchForm" class="search-form">
+                <el-form-item label="API名称">
+                  <el-input v-model="searchForm.apiName" placeholder="请输入API名称" clearable />
+                </el-form-item>
+                <el-form-item label="接口编号">
+                  <el-input v-model="searchForm.apiCode" placeholder="请输入接口编号" clearable />
+                </el-form-item>
+                <el-form-item label="状态">
+                  <el-select v-model="searchForm.status" placeholder="请选择状态" clearable>
+                    <el-option label="启用" :value="1" />
+                    <el-option label="禁用" :value="0" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="handleSearch">查询</el-button>
+                  <el-button @click="resetSearch">重置</el-button>
+                </el-form-item>
+              </el-form>
+            </el-col>
+            <el-col :span="8" style="text-align: right">
+              <el-button type="primary" @click="handleAdd">新增</el-button>
+            </el-col>
+          </el-row>
+        </div>
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column prop="apiName" label="API名称" width="180" />
       <el-table-column prop="apiCode" label="接口编号" width="180" />
@@ -43,6 +46,7 @@
         <template #default="{ row }">
           <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
           <el-button link type="primary" @click="handleView(row)">查看</el-button>
+          <el-button link type="primary" @click="handleTest(row)">测试</el-button>
           <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
@@ -108,6 +112,18 @@
         </span>
       </template>
     </el-dialog>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="目录管理" name="directory">
+        <api-directory />
+      </el-tab-pane>
+      <el-tab-pane label="API维护" name="maintenance">
+        <api-maintenance />
+      </el-tab-pane>
+      <el-tab-pane label="API反馈" name="feedback">
+        <api-feedback />
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -115,6 +131,12 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { get, post, put, del } from '../utils/api'
+import { useRouter } from 'vue-router'
+import ApiDirectory from './api-management/ApiDirectory.vue'
+import ApiMaintenance from './api-management/ApiMaintenance.vue'
+import ApiFeedback from './api-management/ApiFeedback.vue'
+
+const activeTab = ref('list')
 
 onMounted(() => {
   fetchData()
@@ -168,6 +190,7 @@ const fetchData = async () => {
 const dialogVisible = ref(false)
 const dialogType = ref('add')
 const formRef = ref(null)
+const router = useRouter()
 
 const form = reactive({
   apiName: '',
@@ -213,6 +236,10 @@ const handleView = (row) => {
   dialogType.value = 'view'
   dialogVisible.value = true
   Object.assign(form, row)
+}
+
+const handleTest = (row) => {
+  router.push(`/test-case-management/${row.id}`)
 }
 
 const handleDelete = (row) => {
