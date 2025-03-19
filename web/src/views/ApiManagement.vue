@@ -156,7 +156,7 @@ const fetchData = async () => {
       status: searchForm.status
     }
     
-    const data = await get('/api/apis', params)
+    const data = await get('/api/apis/page', params)
     tableData.value = data.records || []
     total.value = data.total || 0
   } catch (error) {
@@ -241,7 +241,7 @@ const handleSubmit = () => {
         if (dialogType.value === 'add') {
           await post('/api/apis', form)
         } else {
-          await put(`/api/apis/${form.id}`, form)
+          await put('/api/apis', form)
         }
         
         ElMessage.success(dialogType.value === 'add' ? '新增成功' : '编辑成功')

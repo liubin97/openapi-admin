@@ -21,9 +21,11 @@ public class ApiInterface {
     
     private String description;
     
-    private String requestParams;
+    private String headers;
     
-    private String responseParams;
+    private String requestExample;
+    
+    private String responseExample;
     
     private String apiKey;
     
@@ -38,4 +40,11 @@ public class ApiInterface {
     private LocalDateTime updateTime;
     
     private Boolean deleted;
+
+    // AI测试配置
+    private String testConfig;
+    private String aiModelType;
+    private Integer testCaseCount;
+    private LocalDateTime lastTestTime;
+    private Integer testInterval;
 }

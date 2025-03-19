@@ -85,7 +85,7 @@ const handleLogin = async () => {
         
         const data = await response.json()
         if (response.ok) {
-          localStorage.setItem('token', data.token)
+          localStorage.setItem('token', data.data.token)
           ElMessage.success('登录成功')
           router.push('/')
         } else {

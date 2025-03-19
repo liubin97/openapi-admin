@@ -3,6 +3,7 @@ package com.trae.openapi.controller;
 import com.trae.openapi.entity.User;
 import com.trae.openapi.service.UserService;
 import com.trae.openapi.vo.LoginRequest;
+import com.trae.openapi.vo.LoginResponse;
 import com.trae.openapi.vo.RegisterRequest;
 import com.trae.openapi.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,11 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public Result<String> login(@RequestBody @Valid LoginRequest request) {
+    public Result<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
         String token = userService.login(request.getUsername(), request.getPassword());
-        return Result.success(token);
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+        return Result.success(response);
     }
 
     @PostMapping("/register")

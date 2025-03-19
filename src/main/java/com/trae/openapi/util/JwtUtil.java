@@ -7,12 +7,14 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
     private static final long EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String SECRET = "ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTY1ZGE0NTYzZjc2ZmI2NjQ3ZDQ3NWYyYjM5OA==";
+    private static final Key key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));
 
     public String generateToken(Long userId) {
         return Jwts.builder()
@@ -34,11 +36,19 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token)
+                    .getBody();
+            
+            // 验证有效期
+            if (claims.getExpiration().before(new Date())) {
+                return false;
+            }
             return true;
+        } catch (io.jsonwebtoken.security.SignatureException e) {
+            throw new RuntimeException("JWT签名不匹配");
         } catch (Exception e) {
             return false;
         }

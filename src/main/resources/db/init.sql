@@ -25,6 +25,25 @@ CREATE TABLE IF NOT EXISTS `api_info` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API信息表';
 
+-- 创建API接口表
+CREATE TABLE IF NOT EXISTS `api_interface` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `api_id` BIGINT NOT NULL COMMENT '关联API ID',
+    `name` VARCHAR(100) NOT NULL COMMENT '接口名称',
+    `path` VARCHAR(200) NOT NULL COMMENT '接口路径',
+    `method` VARCHAR(10) NOT NULL COMMENT '请求方法',
+    `description` VARCHAR(500) DEFAULT NULL COMMENT '接口描述',
+    `api_key` VARCHAR(100) NOT NULL COMMENT '接口密钥',
+    `daily_limit` INT NOT NULL DEFAULT 1000 COMMENT '每日调用限额',
+    `creator_id` BIGINT NOT NULL COMMENT '创建者ID',
+    `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted` TINYINT NOT NULL DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
+    PRIMARY KEY (`id`),
+    KEY `idx_api_id` (`api_id`),
+    FOREIGN KEY (`api_id`) REFERENCES `api_info`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API接口表';
+
 -- 创建API版本表
 CREATE TABLE IF NOT EXISTS `api_version` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -42,5 +61,5 @@ CREATE TABLE IF NOT EXISTS `api_version` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API版本表';
 
 -- 初始化管理员账户
-INSERT INTO `user` (`username`, `password`, `salt`) VALUES
+INSERT IGNORE INTO `user` (`username`, `password`, `salt`) VALUES
 ('admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin123');

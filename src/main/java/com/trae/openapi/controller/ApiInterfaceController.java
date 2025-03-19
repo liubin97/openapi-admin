@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/interface")
+@RequestMapping("/api/apis")
 public class ApiInterfaceController {
     @Autowired
     private ApiInterfaceService apiInterfaceService;

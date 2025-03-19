@@ -22,7 +22,13 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         }
 
         // 获取token
-        String token = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(Result.error("认证头格式错误").toString());
+            return false;
+        }
+        String token = authHeader.substring(7);
         if (token == null || token.isEmpty()) {
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(Result.error("未登录").toString());
@@ -32,7 +38,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         // 验证token
         if (!jwtUtil.validateToken(token)) {
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(Result.error("token无效").toString());
+            response.getWriter().write(Result.error("token无效或已过期").toString());
             return false;
         }
 
