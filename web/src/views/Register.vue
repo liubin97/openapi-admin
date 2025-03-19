@@ -1,23 +1,55 @@
 <template>
-  <div class="register-container">
-    <el-card class="register-card">
-      <template #header>
-        <h2>注册</h2>
-      </template>
-      <el-form :model="registerForm" :rules="rules" ref="registerFormRef">
+  <div class="auth-container register-container">
+    <!-- 装饰元素 -->
+    <div class="decoration-circle decoration-circle-1"></div>
+    <div class="decoration-circle decoration-circle-2"></div>
+    <div class="decoration-circle decoration-circle-3"></div>
+    
+    <!-- 系统标题 -->
+    <div class="system-title">OpenAPI 管理系统</div>
+    <div class="system-subtitle">高效、安全的API管理平台</div>
+    
+    <el-card class="auth-card register-card">
+      <div class="auth-header">
+        <h2><el-icon class="api-icon"><Key /></el-icon>用户注册</h2>
+      </div>
+      <el-form :model="registerForm" :rules="rules" ref="registerFormRef" class="auth-form">
         <el-form-item prop="username">
-          <el-input v-model="registerForm.username" placeholder="用户名" prefix-icon="User" />
+          <el-input 
+            v-model="registerForm.username" 
+            placeholder="请输入用户名" 
+            :prefix-icon="User" 
+            size="large"
+          />
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="registerForm.password" type="password" placeholder="密码" prefix-icon="Lock" show-password />
+          <el-input 
+            v-model="registerForm.password" 
+            type="password" 
+            placeholder="请输入密码" 
+            :prefix-icon="Lock" 
+            show-password
+            size="large"
+          />
         </el-form-item>
         <el-form-item prop="confirmPassword">
-          <el-input v-model="registerForm.confirmPassword" type="password" placeholder="确认密码" prefix-icon="Lock" show-password />
+          <el-input 
+            v-model="registerForm.confirmPassword" 
+            type="password" 
+            placeholder="请确认密码" 
+            :prefix-icon="Lock" 
+            show-password
+            size="large"
+          />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleRegister" style="width: 100%">注册</el-button>
+          <el-button 
+            class="auth-button" 
+            @click="handleRegister"
+            :loading="loading"
+          >注册</el-button>
         </el-form-item>
-        <div class="login-link">
+        <div class="auth-link">
           <router-link to="/login">已有账号？立即登录</router-link>
         </div>
       </el-form>
@@ -29,9 +61,11 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { User, Lock, Key } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const registerFormRef = ref(null)
+const loading = ref(false)
 
 const registerForm = reactive({
   username: '',
@@ -71,6 +105,7 @@ const handleRegister = async () => {
   
   await registerFormRef.value.validate(async (valid) => {
     if (valid) {
+      loading.value = true
       try {
         const response = await fetch('/api/auth/register', {
           method: 'POST',
@@ -92,6 +127,8 @@ const handleRegister = async () => {
         }
       } catch (error) {
         ElMessage.error('注册失败，请稍后重试')
+      } finally {
+        loading.value = false
       }
     }
   })
@@ -99,25 +136,11 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
+/* 注册页面特定样式，全局样式在global.css中 */
 .register-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f5f5f5;
-}
-
-.register-card {
-  width: 400px;
-}
-
-.login-link {
-  text-align: center;
-  margin-top: 16px;
-}
-
-.login-link a {
-  color: #409eff;
-  text-decoration: none;
 }
 </style>

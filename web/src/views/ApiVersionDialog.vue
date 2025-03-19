@@ -48,8 +48,9 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { post, put } from '../utils/api'
 
 const props = defineProps({
   dialogType: {
@@ -104,18 +105,11 @@ const handleSubmit = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const url = props.dialogType === 'add' ? '/api/versions' : `/api/versions/${form.value.id}`
-        const method = props.dialogType === 'add' ? 'POST' : 'PUT'
-        
-        const response = await fetch(url, {
-          method,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(form.value)
-        })
-        
-        if (!response.ok) throw new Error('操作失败')
+        if (props.dialogType === 'add') {
+          await post('/api/versions', form.value)
+        } else {
+          await put(`/api/versions/${form.value.id}`, form.value)
+        }
         
         ElMessage.success(props.dialogType === 'add' ? '新增成功' : '更新成功')
         emit('success')

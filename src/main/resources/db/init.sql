@@ -1,3 +1,4 @@
+-- 创建用户表
 CREATE TABLE IF NOT EXISTS `user` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `username` VARCHAR(50) NOT NULL COMMENT '用户名',
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     UNIQUE KEY `uk_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
+-- 创建API信息表
 CREATE TABLE IF NOT EXISTS `api_info` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `name` VARCHAR(100) NOT NULL COMMENT 'API名称',
@@ -23,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `api_info` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API信息表';
 
+-- 创建API版本表
 CREATE TABLE IF NOT EXISTS `api_version` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `api_id` BIGINT NOT NULL COMMENT 'API ID',
@@ -37,3 +40,7 @@ CREATE TABLE IF NOT EXISTS `api_version` (
     PRIMARY KEY (`id`),
     KEY `idx_api_id` (`api_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API版本表';
+
+-- 初始化管理员账户
+INSERT INTO `user` (`username`, `password`, `salt`) VALUES
+('admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin123');
