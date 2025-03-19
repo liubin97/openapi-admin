@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.trae.openapi.entity.User;
 import com.trae.openapi.mapper.UserMapper;
 import com.trae.openapi.service.UserService;
+import com.trae.openapi.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -13,6 +15,9 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public String login(String username, String password) {
@@ -26,7 +31,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!encryptedPassword.equals(user.getPassword())) {
             throw new RuntimeException("密码错误");
         }
-        return UUID.randomUUID().toString().replace("-", "");
+        return jwtUtil.generateToken(user.getId());
     }
 
     @Override
