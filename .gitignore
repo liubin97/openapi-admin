@@ -1,3 +1,5 @@
 target/classes/application.yml
 target/*
 web/node_modules/*
+
+.idea/*
