@@ -197,20 +197,27 @@ const handleCommand = (command) => {
   align-items: center;
 }
 
-:deep(.el-tabs__header) {
-  margin-bottom: 0;
-}
-
-:deep(.el-tabs__nav) {
-  border: none;
-}
-
-:deep(.el-tabs__item) {
-  height: 40px;
-  line-height: 40px;
-}
-
-:deep(.el-tabs__item.is-active) {
-  background-color: #f0f2f5;
+:deep(.el-menu-item) {
+  &.is-active {
+    background-color: #263445;
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary-color);
+      transition: transform 0.3s;
+      transform: scaleY(0);
+    }
+    &:hover::before {
+      transform: scaleY(1);
+    }
+  }
+  
+  &:hover {
+    background-color: #263445 !important;
+  }
 }
 </style>

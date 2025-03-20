@@ -296,16 +296,98 @@ const handleCurrentChange = (val) => {
 
 <style scoped>
 .api-management {
-  padding: 20px;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  margin: 16px;
 }
 
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.search-form {
+  .el-form-item {
+    margin-bottom: 16px;
+  }
+}
+
+.el-table {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  
+  :deep(th.el-table__cell) {
+    background-color: #fafafa;
+    color: #606266;
+    font-weight: 500;
+  }
+  
+  :deep(.el-table__row) {
+    transition: background-color 0.3s;
+    
+    &:hover {
+      background-color: #f5f7fa;
+    }
+  }
 }
 
 .pagination {
-  margin-top: 20px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
   display: flex;
   justify-content: flex-end;
+}
+
+.api-tabs {
+  :deep(.el-tabs__nav-wrap::after) {
+    height: 1px;
+  }
+  
+  :deep(.el-tabs__item) {
+    font-size: 15px;
+    padding: 0 24px;
+    height: 48px;
+    line-height: 48px;
+    transition: all 0.3s;
+    
+    &.is-active {
+      font-weight: 500;
+    }
+    
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
+
+:deep(.el-dialog) {
+  border-radius: 8px;
+  overflow: hidden;
+  
+  .el-dialog__header {
+    margin: 0;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    .el-dialog__title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+  
+  .el-dialog__body {
+    padding: 24px;
+  }
+  
+  .el-dialog__footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+  }
 }
 </style>

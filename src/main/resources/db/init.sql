@@ -28,20 +28,26 @@ CREATE TABLE IF NOT EXISTS `api_info` (
 -- 创建API接口表
 CREATE TABLE IF NOT EXISTS `api_interface` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `api_id` BIGINT NOT NULL COMMENT '关联API ID',
     `name` VARCHAR(100) NOT NULL COMMENT '接口名称',
     `path` VARCHAR(200) NOT NULL COMMENT '接口路径',
     `method` VARCHAR(10) NOT NULL COMMENT '请求方法',
     `description` VARCHAR(500) DEFAULT NULL COMMENT '接口描述',
+    `headers` TEXT DEFAULT NULL COMMENT '请求头',
+    `request_example` TEXT DEFAULT NULL COMMENT '请求示例',
+    `response_example` TEXT DEFAULT NULL COMMENT '响应示例',
     `api_key` VARCHAR(100) NOT NULL COMMENT '接口密钥',
     `daily_limit` INT NOT NULL DEFAULT 1000 COMMENT '每日调用限额',
-    `creator_id` BIGINT NOT NULL COMMENT '创建者ID',
+    `status` INT NOT NULL DEFAULT 0 COMMENT '接口状态：0-禁用，1-启用',
+    `version_id` BIGINT DEFAULT NULL COMMENT '版本ID',
+    `test_config` TEXT DEFAULT NULL COMMENT 'AI测试配置',
+    `ai_model_type` VARCHAR(50) DEFAULT NULL COMMENT 'AI模型类型',
+    `test_case_count` INT DEFAULT 0 COMMENT '测试用例数量',
+    `last_test_time` DATETIME DEFAULT NULL COMMENT '最后测试时间',
+    `test_interval` INT DEFAULT NULL COMMENT '测试间隔（分钟）',
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `deleted` TINYINT NOT NULL DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (`id`),
-    KEY `idx_api_id` (`api_id`),
-    FOREIGN KEY (`api_id`) REFERENCES `api_info`(`id`)
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API接口表';
 
 -- 创建API版本表
